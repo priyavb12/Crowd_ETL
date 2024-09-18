@@ -186,7 +186,6 @@ campaign_df
 # Format the launched_date and end_date columns to datetime format
 from datetime import datetime as dt
 campaign_df['launched_date'] = pd.to_datetime(campaign_df['launched_date'],unit='s').dt.strftime('%Y-%m-%d')
-
 campaign_df
 
 
