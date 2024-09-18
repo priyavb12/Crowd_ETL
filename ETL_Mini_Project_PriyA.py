@@ -166,13 +166,13 @@ campaign_df = campaign_df.rename(columns = {'blurb':'description' ,'launched_at'
 campaign_df
 
 
-# In[36]:
+# In[34]:
 
 
 campaign_df.dtypes
 
 
-# In[38]:
+# In[36]:
 
 
 # Convert the goal and pledged columns to a `float` data type.
@@ -180,27 +180,30 @@ campaign_df[['goal','pledged']] = campaign_df[['goal','pledged']].astype(float)
 campaign_df
 
 
-# In[60]:
+# In[38]:
 
 
 # Format the launched_date and end_date columns to datetime format
 from datetime import datetime as dt
-#campaign_df['launched_date'] = pd.to_datetime(campaign_df['launched_date'], unit='s').dt.strftime('%Y-%m-%d')
-#campaign_df['end_date'] = pd.to_datetime(campaign_df['end_date'], unit='s').dt.strftime('%Y-%m-%d')
+campaign_df['launched_date'] = pd.to_datetime(campaign_df['launched_date'],unit='s').dt.strftime('%Y-%m-%d')
 
-
-campaign_df['launched_date'] = pd.to_datetime(campaign_df['launched_date'])
-campaign_df['end_date'] = pd.to_datetime(campaign_df['end_date'])
 campaign_df
 
 
-# In[62]:
+# In[40]:
+
+
+campaign_df['end_date'] = pd.to_datetime(campaign_df['end_date'], unit='s').dt.strftime('%Y-%m-%d')
+campaign_df
+
+
+# In[42]:
 
 
 campaign_df.dtypes
 
 
-# In[64]:
+# In[44]:
 
 
 # Merge the campaign_df with the category_df on the "category" column and 
@@ -210,7 +213,7 @@ campaign_merged_df = campaign_df.merge(category_df, on= 'category',how = 'left')
 campaign_merged_df.tail(10)
 
 
-# In[66]:
+# In[46]:
 
 
 # Drop unwanted columns
@@ -218,7 +221,7 @@ campaign_cleaned = campaign_merged_df.drop(['staff_pick','spotlight','category &
 campaign_cleaned
 
 
-# In[70]:
+# In[ ]:
 
 
 # Export the DataFrame as a CSV file. 
@@ -227,7 +230,7 @@ campaign_cleaned.to_csv("./Resources/campaign.csv", index=False)
 
 # ### Extract the contacts.xlsx Data.
 
-# In[89]:
+# In[ ]:
 
 
 # Read the data into a Pandas DataFrame. Use the `header=2` parameter when reading in the data.
@@ -247,7 +250,7 @@ contact_info_df.head()
 
 # ### Option 1: Use Pandas to create the contacts DataFrame.
 
-# In[93]:
+# In[ ]:
 
 
 # Iterate through the contact_info_df and convert each row to a dictionary.
@@ -264,7 +267,7 @@ for i, row in contact_info_df.iterrows():
 print(dict_values)
 
 
-# In[95]:
+# In[ ]:
 
 
 # Create a contact_info DataFrame and add each list of values, i.e., each row 
@@ -273,14 +276,14 @@ contact_df = pd.DataFrame(dict_values, columns=['contact_id','name','email'])
 contact_df
 
 
-# In[97]:
+# In[ ]:
 
 
 # Check the datatypes.
 contact_df.info()
 
 
-# In[99]:
+# In[ ]:
 
 
 # Create a "first"name" and "last_name" column with the first and last names from the "name" column. 
@@ -292,7 +295,7 @@ contact_df_clean = contact_df.drop(['name'],axis=1)
 contact_df_clean
 
 
-# In[111]:
+# In[ ]:
 
 
 # Reorder the columns
@@ -300,14 +303,14 @@ contact_df_clean = contact_df_clean[['contact_id','first_name','last_name','emai
 contact_df_clean
 
 
-# In[113]:
+# In[ ]:
 
 
 # Check the datatypes one more time before exporting as CSV file.
 contact_df_clean.info()
 
 
-# In[120]:
+# In[ ]:
 
 
 # Export the DataFrame as a CSV file. 
@@ -316,14 +319,14 @@ contact_df_clean.to_csv("./Resources/contacts.csv", encoding='utf8', index=False
 
 # ### Option 2: Use regex to create the contacts DataFrame.
 
-# In[122]:
+# In[ ]:
 
 
 contact_info_df_copy = contact_info_df.copy()
 contact_info_df_copy.head()
 
 
-# In[124]:
+# In[ ]:
 
 
 # Extract the four-digit contact ID number.
@@ -331,14 +334,14 @@ contact_info_df_copy['contact_id'] = contact_info_df_copy['contact_info'].str.ex
 contact_info_df_copy
 
 
-# In[126]:
+# In[ ]:
 
 
 # Check the datatypes.
 contact_info_df_copy.dtypes
 
 
-# In[128]:
+# In[ ]:
 
 
 # Convert the "contact_id" column to an int64 data type.
@@ -346,7 +349,7 @@ contact_info_df_copy['contact_id'] = pd.to_numeric(contact_info_df_copy['contact
 contact_info_df_copy.info()
 
 
-# In[130]:
+# In[ ]:
 
 
 # Extract the name of the contact and add it to a new column.
@@ -354,7 +357,7 @@ contact_info_df_copy[['name']] =contact_info_df_copy['contact_info'].str.extract
 contact_info_df_copy
 
 
-# In[136]:
+# In[ ]:
 
 
 # Extract the email from the contacts and add the values to a new column.
@@ -362,7 +365,7 @@ contact_info_df_copy['email'] = contact_info_df_copy['contact_info'].str.extract
 contact_info_df_copy
 
 
-# In[138]:
+# In[ ]:
 
 
 # Create a copy of the contact_info_df with the 'contact_id', 'name', 'email' columns.
@@ -370,7 +373,7 @@ contact_info_df_copy2 = contact_info_df_copy[['contact_id','name','email']]
 contact_info_df_copy2
 
 
-# In[140]:
+# In[ ]:
 
 
 # Create a "first"name" and "last_name" column with the first and last names from the "name" column. 
@@ -381,14 +384,14 @@ contact_info_df_copy2.drop(columns=['name'],inplace=True)
 contact_info_df_copy2
 
 
-# In[142]:
+# In[ ]:
 
 
 # Reorder the columns
 contact_info_df_copy2[['contact_id','first_name','last_name','email']]
 
 
-# In[144]:
+# In[ ]:
 
 
 # Check the datatypes one more time before exporting as CSV file.
@@ -405,13 +408,13 @@ contact_info_df_copy2.info()
 
 # ### EXTRACT TRANSFORM AND LOAD using sqlalchemy
 
-# In[147]:
+# In[ ]:
 
 
 get_ipython().system('pip install --upgrade sqlalchemy')
 
 
-# In[149]:
+# In[ ]:
 
 
 import psycopg2
@@ -424,81 +427,81 @@ from sqlalchemy import create_engine
 # db = 'etl'
 
 
-# In[151]:
+# In[ ]:
 
 
 engine = create_engine('postgresql+psycopg2://postgres:postgres@localhost:5432/etl')
 
 
-# In[159]:
+# In[ ]:
 
 
 pd.read_sql('select * from campaign', engine)
 
 
-# In[161]:
+# In[ ]:
 
 
 campaign_df = pd.read_csv('./Resources/campaign.csv')
 
 
-# In[163]:
+# In[ ]:
 
 
 campaign_df.to_sql( 'campaign', con=engine, if_exists = 'replace' )
 
 
-# In[165]:
+# In[ ]:
 
 
 contacts_df = pd.read_csv('./Resources/contacts.csv')
 contacts_df
 
 
-# In[167]:
+# In[ ]:
 
 
 contacts_df.to_sql('contacts', con=engine, if_exists = 'replace')
 
 
-# In[169]:
+# In[ ]:
 
 
 pd.read_sql('select * from contacts', engine)
 
 
-# In[171]:
+# In[ ]:
 
 
 category_df = pd.read_csv('./Resources/category.csv')
 
 
-# In[173]:
+# In[ ]:
 
 
 category_df.to_sql('category', con=engine, if_exists = 'replace')
 
 
-# In[175]:
+# In[ ]:
 
 
 pd.read_sql('select * from category',engine)
 
 
-# In[177]:
+# In[ ]:
 
 
 subcategory_df = pd.read_csv('./Resources/subcategory.csv')
 subcategory_df
 
 
-# In[179]:
+# In[ ]:
 
 
 subcategory_df.to_sql('subcategory', con = engine, if_exists = 'replace')
 
 
-# In[181]:
+# In[ ]:
 
 
 pd.read_sql('select * from subcategory',engine)
